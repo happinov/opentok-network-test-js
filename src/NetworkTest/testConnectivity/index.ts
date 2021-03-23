@@ -97,6 +97,8 @@ function connectToSession(
     }
     const session = OT.initSession(apiKey, sessionId, sessionOptions);
     session.connect(token, (error?: OT.OTError) => {
+      if (error) console.error(error);
+
       if (errorHasName(error, OTErrorType.OT_AUTHENTICATION_ERROR)) {
         reject(new e.ConnectToSessionTokenError());
       } else if (errorHasName(error, OTErrorType.OT_INVALID_SESSION_ID)) {
@@ -122,6 +124,7 @@ function validateDevices(OT: OT.Client): Promise<AvailableDevices> {
     OT.getDevices((error?: OT.OTError, devices: OT.Device[] = []) => {
 
       if (error) {
+        console.error(error);
         reject(new e.FailedToObtainMediaDevices());
       } else {
 
@@ -185,6 +188,7 @@ function checkCreateLocalPublisher(
           if (!error) {
             resolve({ publisher });
           } else {
+            console.error(error);
             reject(new e.FailedToCreateLocalPublisher());
           }
         });
@@ -213,6 +217,7 @@ function checkPublishToSession(
       .then(({ publisher }: CreateLocalPublisherResults) => {
         session.publish(publisher, (error?: OT.OTError) => {
           if (error) {
+            console.error(error);
             if (errorHasName(error, OTErrorType.NOT_CONNECTED)) {
               disconnectAndReject(new e.PublishToSessionNotConnectedError());
             } else if (errorHasName(error, OTErrorType.UNABLE_TO_PUBLISH)) {

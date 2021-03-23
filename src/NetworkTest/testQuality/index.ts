@@ -59,6 +59,7 @@ function connectToSession(session: OT.Session, token: string): Promise<OT.Sessio
     } else {
       session.connect(token, (error?: OT.OTError) => {
         if (error) {
+          console.error(error);
           if (errorHasName(error, OTErrorType.OT_AUTHENTICATION_ERROR)) {
             reject(new e.ConnectToSessionTokenError());
           } else if (errorHasName(error, OTErrorType.OT_INVALID_SESSION_ID)) {
@@ -83,6 +84,7 @@ function validateDevices(OT: OT.Client): Promise<AvailableDevices> {
     OT.getDevices((error?: OT.OTError, devices: OT.Device[] = []) => {
 
       if (error) {
+        console.error(error);
         reject(new e.FailedToObtainMediaDevices());
       } else {
 
@@ -319,6 +321,7 @@ function checkSubscriberQuality(
             }, 5000);
 
           } catch (exception) {
+            console.error(exception);
             reject(new e.SubscriberGetStatsError());
           }
         }

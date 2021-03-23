@@ -8,6 +8,7 @@ export default function filterDevicesForType(OT: OT.Client, type: InputDeviceTyp
   return new Promise((resolve, reject) => {
     OT.getDevices((error?: OT.OTError, devices: OT.Device[] = []) => {
       if (error) {
+        console.error(error);
         reject(new e.FailedToObtainMediaDevices());
       } else {
         const deviceList = devices.filter((device: OT.Device) => device.kind === type);
